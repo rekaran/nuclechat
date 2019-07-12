@@ -29,7 +29,7 @@ app.use((req, res, next)=>{
     res.status(404).redirect("/")
 });
 
-const server = app.listen(3000, "0.0.0.0");
+const server = app.listen(3000, "127.0.0.1");
 // const io = require("./socket").init(server);
 
 // io.on("connection", socket=>{
