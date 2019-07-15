@@ -148,6 +148,7 @@ router.post("/encode/:domain", (req, res, next)=>{
     let variations = req.body.variation;
     let key = req.body.hash;
     let intent = req.body.intent;
+    let flow = req.body.flow;
     let header_hash = req.get('Authorization');
     let timestamp = getTimestamp('+5.5');
     let origin = req.get('origin');
@@ -157,7 +158,7 @@ router.post("/encode/:domain", (req, res, next)=>{
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // Check if the data is cached in redis or not, if it is cached then replace both metamorph as well as shilded
-        let encData = {answers: data, intents: intent, variations: variations};
+        let encData = {answers: data, intents: intent, variations: variations, flows: flow};
         let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(encData), key).toString();
         let shilded_data = {data: encryptedData, domain: domain, projectHash: header_hash, projectKey: key, timestamp: timestamp}
         res.send(shilded_data);
