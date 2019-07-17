@@ -85,7 +85,7 @@ router.post("/data/:domain", (req, res, next)=>{
             }
         });
     }else{
-        res.redirect("https://www.nucletech.com");
+        res.status(301).redirect("https://www.nucletech.com");
     }
     console.log("Data -> ", origin, userIP);
 });
@@ -110,7 +110,7 @@ router.post("/datas/:domain", (req, res, next)=>{
             }
         });
     }else{
-        res.redirect("https://www.nucletech.com");
+        res.status(301).redirect("https://www.nucletech.com");
     }
     console.log("Datas -> ", origin, userIP);
 });
@@ -132,11 +132,11 @@ router.post("/resources/:domain", (req, res, next)=>{
             if(Object.keys(meta).length!==0){
                 res.send(meta.get("resources"));
             }else{
-                res.redirect("https://www.nucletech.com");
+                res.status(301).redirect("https://www.nucletech.com");
             }
         });
     }else{
-        res.redirect("https://www.nucletech.com");
+        res.status(301).redirect("https://www.nucletech.com");
     }
     console.log("Resouces -> ", origin, userIP);
 });
@@ -165,13 +165,13 @@ router.post("/encode/:domain", (req, res, next)=>{
         // let bytes  = CryptoJS.RabbitLegacy.decrypt(encryptedData, key);
         // let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     }else{
-        res.redirect("https://www.nucletech.com");
+        res.status(301).redirect("https://www.nucletech.com");
     }
     console.log("Encode -> ", origin, userIP);
 });
 
 router.use("/", (req, res, next)=>{
-    res.redirect("https://www.nucletech.com");
+    res.status(301).redirect("https://www.nucletech.com");
 });
 
 module.exports = router;
