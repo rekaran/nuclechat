@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Mongoose = require('mongoose').Mongoose;
-const redis = require("redis");
+// const redis = require("redis");
 const CryptoJS = require("crypto-js");
 // const io = require('../socket');
 
@@ -40,7 +40,7 @@ router.post("/key/:domain", (req, res, next)=>{
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
         keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
-            let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: header_hash, saveTime: meta.get("saveTimestamp"), greetings: meta.get("first_message")}
+            let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: header_hash, saveTime: meta.get("saveTimestamp"), greetings: meta.get("first_message"), context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
             if(Object.keys(meta).length!==0){
                 if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                     if(meta.limitflag){
