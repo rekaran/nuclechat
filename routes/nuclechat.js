@@ -34,16 +34,17 @@ router.post("/key/:domain", (req, res, next)=>{
     let hash = req.body.key;
     let header_hash = req.get('Authorization');
     let origin = req.get('origin');
-    if(origin==="http://127.0.0.1:8000"){
-        origin = "nucletech.com"
-    }
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
+        console.log("True");
         keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
             let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: header_hash, saveTime: meta.get("saveTimestamp"), greetings: meta.get("first_message"), context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
             if(Object.keys(meta).length!==0){
+                console.log("True");
                 if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
+                    console.log("True");
                     if(meta.limitflag){
+                        console.log("True");
                         if(meta.usercount<=meta.userlimit){
                             res.send(data);
                         }else{
@@ -71,9 +72,6 @@ router.post("/data/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = req.headers.timestamp;
     let origin = req.get('origin');
-    if(origin==="http://127.0.0.1:8000"){
-        origin = "nucletech.com"
-    }
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
@@ -96,9 +94,6 @@ router.post("/datas/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = req.body.timestamp;
     let origin = req.get('origin');
-    if(origin==="http://127.0.0.1:8000"){
-        origin = "nucletech.com"
-    }
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
@@ -122,9 +117,6 @@ router.post("/resources/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = req.body.timestamp;
     let origin = req.get('origin');
-    if(origin==="http://127.0.0.1:8000"){
-        origin = "nucletech.com"
-    }
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // Query Resource Manager to get list of resources against key send by the client and return sync and async resources
@@ -152,9 +144,6 @@ router.post("/encode/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = getTimestamp('+5.5');
     let origin = req.get('origin');
-    if(origin==="http://127.0.0.1:8000"){
-        origin = "nucletech.com"
-    }
     var userIP = req.socket.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // Check if the data is cached in redis or not, if it is cached then replace both metamorph as well as shilded
