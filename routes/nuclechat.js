@@ -62,7 +62,7 @@ router.post("/key/:domain", (req, res, next)=>{
         }
         console.log("Key -> ", origin, userIP);
     }catch(err){
-        console.error(err);
+        console.log(err);
         res.status(404).send({});
     }
 });
@@ -89,7 +89,7 @@ router.post("/data/:domain", (req, res, next)=>{
         }
         console.log("Data -> ", origin, userIP);
     }catch(err){
-        console.error(err);
+        console.log(err);
         res.status(404).send({});
     }
 });
@@ -116,7 +116,7 @@ router.post("/datas/:domain", (req, res, next)=>{
         }
         console.log("Datas -> ", origin, userIP);
     }catch(err){
-        console.error(err);
+        console.log(err);
         res.status(404).send({});
     }
 });
@@ -144,7 +144,7 @@ router.post("/resources/:domain", (req, res, next)=>{
         }
         console.log("Resouces -> ", origin, userIP);
     }catch(err){
-        console.error(err);
+        console.log(err);
         res.status(404).send({});
     }
 });
@@ -175,7 +175,7 @@ router.post("/encode/:domain", (req, res, next)=>{
         }
         console.log("Encode -> ", origin, userIP);
     }catch(err){
-        console.error(err);
+        console.log(err);
         res.status(404).send({});
     }
 });
