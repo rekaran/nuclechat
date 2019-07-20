@@ -34,7 +34,7 @@ router.post("/key/:domain", (req, res, next)=>{
     let hash = req.body.key;
     let header_hash = req.get('Authorization');
     let origin = req.get('origin').split("://")[1];
-    var userIP = req.socket.remoteAddress;
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if(header_hash===hash&&origin===domain){
         keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
             let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: header_hash, saveTime: meta.get("saveTimestamp"), greetings: meta.get("first_message"), context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
@@ -68,7 +68,7 @@ router.post("/data/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = req.headers.timestamp;
     let origin = req.get('origin').split("://")[1];
-    var userIP = req.socket.remoteAddress;
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
         metamorph.find({projectHash: header_hash}).sort({"timestamp":-1}).then(meta=>{
@@ -90,7 +90,7 @@ router.post("/datas/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = req.body.timestamp;
     let origin = req.get('origin').split("://")[1];
-    var userIP = req.socket.remoteAddress;
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
         shielded.find({projectHash: header_hash}).sort({"timestamp":-1}).then(meta=>{
@@ -113,7 +113,7 @@ router.post("/resources/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = req.body.timestamp;
     let origin = req.get('origin').split("://")[1];
-    var userIP = req.socket.remoteAddress;
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // Query Resource Manager to get list of resources against key send by the client and return sync and async resources
         resources.findOne({projectHash: header_hash, domain: domain, projectKey: key}).sort({"timestamp":-1}).then(meta=>{
@@ -140,7 +140,7 @@ router.post("/encode/:domain", (req, res, next)=>{
     let header_hash = req.get('Authorization');
     let timestamp = getTimestamp('+5.5');
     let origin = req.get('origin').split("://")[1];
-    var userIP = req.socket.remoteAddress;
+    var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if(header_hash===hash&&origin===domain){
         // Check if the data is cached in redis or not, if it is cached then replace both metamorph as well as shilded
         let encData = {answers: data, intents: intent, variations: variations, flows: flow};
