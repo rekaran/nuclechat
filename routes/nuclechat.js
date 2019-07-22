@@ -62,7 +62,6 @@ router.post("/key/:domain", (req, res, next)=>{
             res.status(404).send({});
         }
         console.log("Key -> ", origin, userIP);
-        res.status(404).send({});
     }catch(err){
         console.log(err);
         res.status(404).send({});
