@@ -163,8 +163,7 @@ router.post("/encode/:domain", (req, res, next)=>{
         let timestamp = getTimestamp('+5.5');
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        console.log(header_hash, hash, origin, domain)
-        if(header_hash===hash&&origin===domain){
+        if(header_hash===hash){
             // Check if the data is cached in redis or not, if it is cached then replace both metamorph as well as shilded
             let encData = {answers: data, intents: intent, variations: variations, flows: flow};
             let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(encData), key).toString();
