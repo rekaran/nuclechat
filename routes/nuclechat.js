@@ -36,6 +36,7 @@ router.post("/key/:domain", (req, res, next)=>{
         let header_hash = req.get('Authorization');
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        console.log(header_hash,hash,origin,domain)
         if(header_hash===hash&&origin===domain){
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: header_hash, saveTime: meta.get("saveTimestamp"), greetings: meta.get("first_message"), context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
