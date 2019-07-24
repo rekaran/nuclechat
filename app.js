@@ -25,10 +25,6 @@ app.use(express.json());
 
 app.use(nuclechatRouter);
 
-app.use((req, res, next)=>{
-    res.status(404).redirect("/")
-});
-
 const server = app.listen(3000, "127.0.0.1");
 // const io = require("./socket").init(server);
 
