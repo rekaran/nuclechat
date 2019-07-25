@@ -91,7 +91,7 @@ router.post("/data/:domain", (req, res, next)=>{
                 }
             });
         }else{
-            res.status(301).redirect("https://www.nucletech.com?utm_source=nuclechat&utm_medium=organic&utm_campaign=awareness&utm_term=social_awareness&utm_content=text_prom");
+            res.status(301).redirect("https://www.nucletech.com");
         }
         console.log("Data -> ", origin, userIP);
     }catch(err){
@@ -118,7 +118,7 @@ router.post("/datas/:domain", (req, res, next)=>{
                 }
             });
         }else{
-            res.status(301).redirect("https://www.nucletech.com?utm_source=nuclechat&utm_medium=organic&utm_campaign=awareness&utm_term=social_awareness&utm_content=text_prom");
+            res.status(301).redirect("https://www.nucletech.com");
         }
         console.log("Datas -> ", origin, userIP);
     }catch(err){
@@ -142,11 +142,11 @@ router.post("/resources/:domain", (req, res, next)=>{
                 if(Object.keys(meta).length!==0){
                     res.send(meta.get("resources"));
                 }else{
-                    res.status(301).redirect("https://www.nucletech.com?utm_source=nuclechat&utm_medium=organic&utm_campaign=awareness&utm_term=social_awareness&utm_content=text_prom");
+                    res.status(301).redirect("https://www.nucletech.com");
                 }
             });
         }else{
-            res.status(301).redirect("https://www.nucletech.com?utm_source=nuclechat&utm_medium=organic&utm_campaign=awareness&utm_term=social_awareness&utm_content=text_prom");
+            res.status(301).redirect("https://www.nucletech.com");
         }
         console.log("Resouces -> ", origin, userIP);
     }catch(err){
@@ -177,7 +177,7 @@ router.post("/encode/:domain", (req, res, next)=>{
             // let bytes  = CryptoJS.RabbitLegacy.decrypt(encryptedData, key);
             // let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         }else{
-            res.status(301).redirect("https://www.nucletech.com?utm_source=nuclechat&utm_medium=organic&utm_campaign=awareness&utm_term=social_awareness&utm_content=text_prom");
+            res.status(301).redirect("https://www.nucletech.com");
         }
         console.log("Encode -> ", origin, userIP);
     }catch(err){
@@ -187,7 +187,7 @@ router.post("/encode/:domain", (req, res, next)=>{
 });
 
 router.use("/", (req, res, next)=>{
-    res.status(301).redirect("https://www.nucletech.com?utm_source=nuclechat&utm_medium=organic&utm_campaign=awareness&utm_term=social_awareness&utm_content=text_prom");
+    res.status(301).redirect("https://www.nucletech.com");
 });
 
 module.exports = router;
