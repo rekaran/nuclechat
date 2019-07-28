@@ -37,10 +37,8 @@ router.post("/key/:domain", (req, res, next)=>{
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){ 
-            console.log(header_hash);
             let decData = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
-            header_hash = JSON.parse(decData.toString(CryptoJS.enc.Utf8));
-            
+            header_hash = decData.toString(CryptoJS.enc.Utf8);
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
