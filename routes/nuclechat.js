@@ -47,7 +47,7 @@ router.post("/key/:domain", (req, res, next)=>{
                         delete pushmessage["type"];
                     }
                     let greetings = meta.get("firstmessages")[req.get("Referer")] || meta.get("first_message");
-                    let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: header_hash, saveTime: meta.get("saveTimestamp"), greetings: greetings, pushmessage: pushmessage, context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
+                    let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: hash, saveTime: meta.get("saveTimestamp"), greetings: greetings, pushmessage: pushmessage, context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
                     if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                         if(meta.get('limitflag')){
                             if(meta.get('usercount')<=meta.get('userlimit')){
