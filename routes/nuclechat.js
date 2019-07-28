@@ -39,6 +39,7 @@ router.post("/key/:domain", (req, res, next)=>{
         if(header_hash===hash&&origin===domain){ 
             let decData = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
             header_hash = JSON.parse(decData.toString(CryptoJS.enc.Utf8));
+            console.log(header_hash)
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
