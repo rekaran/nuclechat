@@ -51,14 +51,13 @@ router.post("/key/:domain", (req, res, next)=>{
                     if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                         if(meta.get('limitflag')){
                             if(meta.get('usercount')<=meta.get('userlimit')){
-                                console.log(header_hash);
-                                let encryptedData = CryptoJS.RabbitLegacy.encrypt(data, header_hash).toString();
+                                let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(data), header_hash).toString();
                                 res.send(encryptedData);
                             }else{
                                 res.status(404).send({});
                             }
                         }else{
-                            let encryptedData = CryptoJS.RabbitLegacy.encrypt(data, header_hash).toString();
+                            let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(data), header_hash).toString();
                             res.send(encryptedData);
                         }
                     }else{
