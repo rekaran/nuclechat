@@ -37,6 +37,8 @@ router.post("/key/:domain", (req, res, next)=>{
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
+            let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = dataDec.toString(CryptoJS.enc.Utf8);
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
@@ -49,12 +51,14 @@ router.post("/key/:domain", (req, res, next)=>{
                     if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                         if(meta.get('limitflag')){
                             if(meta.get('usercount')<=meta.get('userlimit')){
-                                res.send(data);
+                                let encryptedData = CryptoJS.RabbitLegacy.encrypt(data, header_hash).toString();
+                                res.send(encryptedData);
                             }else{
                                 res.status(404).send({});
                             }
                         }else{
-                            res.send(data);
+                            let encryptedData = CryptoJS.RabbitLegacy.encrypt(data, header_hash).toString();
+                            res.send(encryptedData);
                         }
                     }else{
                         res.status(404).send({});
@@ -82,6 +86,8 @@ router.post("/data/:domain", (req, res, next)=>{
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
+            let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = dataDec.toString(CryptoJS.enc.Utf8);
             // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
             metamorph.find({projectHash: header_hash}).sort({"timestamp":-1}).then(meta=>{
                 if(meta.length===0){
@@ -109,6 +115,8 @@ router.post("/datas/:domain", (req, res, next)=>{
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
+            let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = dataDec.toString(CryptoJS.enc.Utf8);
             // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
             shielded.find({projectHash: header_hash}).sort({"timestamp":-1}).then(meta=>{
                 if(meta.length===0){
@@ -131,14 +139,15 @@ router.post("/resources/:domain", (req, res, next)=>{
     try{
         const domain = req.params.domain;
         let hash = req.body.key;
-        let key = req.body.keys;
         let header_hash = req.get('Authorization');
         let timestamp = req.body.timestamp;
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
+            let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = dataDec.toString(CryptoJS.enc.Utf8);
             // Query Resource Manager to get list of resources against key send by the client and return sync and async resources
-            resources.findOne({projectHash: header_hash, domain: domain, projectKey: key}).sort({"timestamp":-1}).then(meta=>{
+            resources.findOne({projectHash: header_hash, domain: domain}).sort({"timestamp":-1}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     res.send(meta.get("resources"));
                 }else{
@@ -180,6 +189,17 @@ router.post("/encode/:domain", (req, res, next)=>{
             res.status(301).redirect("https://www.nucletech.com");
         }
         console.log("Encode -> ", origin, userIP);
+    }catch(err){
+        console.log(err);
+        res.status(404).send({});
+    }
+});
+
+router.post("/hash_encode/:domain", (req, res, next)=>{
+    try{
+        const hash = req.body.hash;
+        let encryptedData = CryptoJS.RabbitLegacy.encrypt(hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
+        res.send(encryptedData);
     }catch(err){
         console.log(err);
         res.status(404).send({});
