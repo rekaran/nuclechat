@@ -39,7 +39,6 @@ router.post("/key/:domain", (req, res, next)=>{
         if(header_hash===hash&&origin===domain){
             let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
             header_hash = dataDec.toString(CryptoJS.enc.Utf8);
-            console.log(header_hash);
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
@@ -52,6 +51,7 @@ router.post("/key/:domain", (req, res, next)=>{
                     if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                         if(meta.get('limitflag')){
                             if(meta.get('usercount')<=meta.get('userlimit')){
+                                console.log(header_hash);
                                 let encryptedData = CryptoJS.RabbitLegacy.encrypt(data, header_hash).toString();
                                 res.send(encryptedData);
                             }else{
