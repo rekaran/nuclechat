@@ -30,7 +30,7 @@ var getTimestamp = offset =>{
 
 // Express Routes
 router.post("/key/:domain", (req, res, next)=>{
-    try {
+    // try {
         const domain = req.params.domain;
         let hash = req.body.key;
         let header_hash = req.get('Authorization');
@@ -72,10 +72,10 @@ router.post("/key/:domain", (req, res, next)=>{
             res.status(404).send({});
         }
         console.log("Key -> ", origin, userIP);
-    }catch(err){
-        console.log(err);
-        res.status(404).send({});
-    }
+    // }catch(err){
+    //     console.log(err);
+    //     res.status(404).send({});
+    // }
 });
 
 router.post("/data/:domain", (req, res, next)=>{
