@@ -149,7 +149,8 @@ router.post("/resources/:domain", (req, res, next)=>{
             // Query Resource Manager to get list of resources against key send by the client and return sync and async resources
             resources.findOne({projectHash: header_hash, domain: domain}).sort({"timestamp":-1}).then(meta=>{
                 if(Object.keys(meta).length!==0){
-                    res.send(meta.get("resources"));
+                    let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(meta.get("resources")), meta.get("projectKey")).toString();
+                    res.send(encryptedData);
                 }else{
                     res.status(301).redirect("https://www.nucletech.com");
                 }
