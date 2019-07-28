@@ -30,7 +30,7 @@ var getTimestamp = offset =>{
 
 // Express Routes
 router.post("/key/:domain", (req, res, next)=>{
-    // try {
+    try {
         const domain = req.params.domain;
         let hash = req.body.key;
         let header_hash = req.get('Authorization');
@@ -71,10 +71,10 @@ router.post("/key/:domain", (req, res, next)=>{
             res.status(404).send({});
         }
         console.log("Key -> ", origin, userIP);
-    // }catch(err){
-    //     console.log(err);
-    //     res.status(404).send({});
-    // }
+    }catch(err){
+        console.log(err);
+        res.status(404).send({});
+    }
 });
 
 router.post("/data/:domain", (req, res, next)=>{
@@ -87,6 +87,8 @@ router.post("/data/:domain", (req, res, next)=>{
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
             // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
+            let decData = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = decData.toString(CryptoJS.enc.Utf8);
             metamorph.find({projectHash: header_hash}).sort({"timestamp":-1}).then(meta=>{
                 if(meta.length===0){
                     res.send({});
@@ -114,6 +116,8 @@ router.post("/datas/:domain", (req, res, next)=>{
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
             // First Check timestamp+hash in redis, if the data is not present in redis then get from mongodb
+            let decData = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = decData.toString(CryptoJS.enc.Utf8);
             shielded.find({projectHash: header_hash}).sort({"timestamp":-1}).then(meta=>{
                 if(meta.length===0){
                     res.send({});
@@ -142,6 +146,8 @@ router.post("/resources/:domain", (req, res, next)=>{
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         if(header_hash===hash&&origin===domain){
             // Query Resource Manager to get list of resources against key send by the client and return sync and async resources
+            let decData = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = decData.toString(CryptoJS.enc.Utf8);
             resources.findOne({projectHash: header_hash, domain: domain, projectKey: key}).sort({"timestamp":-1}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(meta.get("resources")), header_hash).toString();
