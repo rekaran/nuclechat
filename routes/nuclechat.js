@@ -36,7 +36,9 @@ router.post("/key/:domain", (req, res, next)=>{
         let header_hash = req.get('Authorization');
         let origin = req.get('origin').split("://")[1];
         var userIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        if(header_hash===hash&&origin===domain){
+        if(header_hash===hash&&origin===domain){ 
+            let decData = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+            header_hash = JSON.parse(decData.toString(CryptoJS.enc.Utf8));
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
@@ -192,7 +194,6 @@ router.post("/encode/:domain", (req, res, next)=>{
 router.post("/hash_encode/:domain", (req, res, next)=>{
     try{
         const hash = req.body.hash;
-        console.log(hash);
         let encryptedData = CryptoJS.RabbitLegacy.encrypt(hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
         res.send(encryptedData);
     }catch(err){
