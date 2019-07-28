@@ -49,12 +49,14 @@ router.post("/key/:domain", (req, res, next)=>{
                     if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                         if(meta.get('limitflag')){
                             if(meta.get('usercount')<=meta.get('userlimit')){
-                                res.send(data);
+                                let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(data), header_hash).toString();
+                                res.send(encryptedData);
                             }else{
                                 res.status(404).send({});
                             }
                         }else{
-                            res.send(data);
+                            let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(data), data.hash).toString();
+                            res.send(encryptedData);
                         }
                     }else{
                         res.status(404).send({});
@@ -140,7 +142,8 @@ router.post("/resources/:domain", (req, res, next)=>{
             // Query Resource Manager to get list of resources against key send by the client and return sync and async resources
             resources.findOne({projectHash: header_hash, domain: domain, projectKey: key}).sort({"timestamp":-1}).then(meta=>{
                 if(Object.keys(meta).length!==0){
-                    res.send(meta.get("resources"));
+                    let encryptedData = CryptoJS.RabbitLegacy.encrypt(JSON.stringify(meta.get("resources")), header_hash).toString();
+                    res.send(encryptedData);
                 }else{
                     res.status(301).redirect("https://www.nucletech.com");
                 }
