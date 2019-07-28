@@ -189,6 +189,18 @@ router.post("/encode/:domain", (req, res, next)=>{
     }
 });
 
+router.post("/hash_encode/:domain", (req, res, next)=>{
+    try{
+        const hash = req.body.hash;
+        console.log(hash);
+        let encryptedData = CryptoJS.RabbitLegacy.encrypt(hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
+        res.send(encryptedData);
+    }catch(err){
+        console.log(err);
+        res.status(404).send({});
+    }
+});
+
 router.use("/", (req, res, next)=>{
     res.status(301).redirect("https://www.nucletech.com");
 });
