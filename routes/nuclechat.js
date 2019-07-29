@@ -55,7 +55,7 @@ router.post("/key/:domain", (req, res, next)=>{
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
                     let inc = meta.get("globalcount")+1;
                     console.log(inc);
-                    keymapper.updateOne({domain: domain, hash: header_hash}, {globalcount: inc}, (err, res)=>{
+                    keymapper.updateOne({domain: domain, hash: header_hash}, {$set: {globalcount: inc}}, (err, res)=>{
                         if(err) console.log(err);
                         console.log("Result Updated")
                     });
