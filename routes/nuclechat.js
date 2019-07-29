@@ -58,6 +58,7 @@ router.post("/key/:domain", (req, res, next)=>{
                 }else{
                     cust_id = req.body.id;
                 }
+                console.log(cust_id);
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
                     let pushmessage = pushmessages[req.get("Referer")] || {};
