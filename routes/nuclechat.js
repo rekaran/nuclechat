@@ -20,12 +20,21 @@ var keymapper = dataManager.model("keymapper", new mongoose.Schema({ strict: fal
 var resources = resourceManager.model("resources", new mongoose.Schema({ strict: false }), "resources");
 
 // Javascript Function
-var getTimestamp = offset =>{
+let getTimestamp = offset =>{
     let date = new Date();
     // date.setHours(0,0,0,0);
     let utc = date.getTime() + (date.getTimezoneOffset() * 60000);
     let newDate = new Date(utc + (3600000*offset));
     return newDate.getTime();
+};
+
+let randomNumber = length =>{
+    let rn = "";
+    let c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(let i=0; i<length; i++){
+        rn += c.charAt(Math.floor(Math.random()*c.length));
+    }
+    return rn;
 };
 
 // Express Routes
@@ -41,8 +50,12 @@ router.post("/key/:domain", (req, res, next)=>{
             header_hash = dataDec.toString(CryptoJS.enc.Utf8);
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 console.log(Object.keys(req.body).includes("id"));
-                if(Object.keys(req.body).includes("id")){
-
+                let cust_id = "";
+                if(!Object.keys(req.body).includes("id")){
+                    cust_id = meta.get("projectId").split("_")[0]+"_"+meta.get("globalcount")+"_"+randomNumber(6);
+                    cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
+                }else{
+                    cust_id = req.body.id;
                 }
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
@@ -51,7 +64,7 @@ router.post("/key/:domain", (req, res, next)=>{
                         delete pushmessage["type"];
                     }
                     let greetings = meta.get("firstmessages")[req.get("Referer")] || meta.get("first_message");
-                    let data = {domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: hash, saveTime: meta.get("saveTimestamp"), greetings: greetings, pushmessage: pushmessage, context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
+                    let data = {id: cust_id, domain: meta.get('domain'), key: meta.get('key'), is_debug: meta.get('is_debug'), is_cache: meta.get('is_cache'), wss: meta.get('wss'), timestamp: getTimestamp('+5.5'), hash: hash, saveTime: meta.get("saveTimestamp"), greetings: greetings, pushmessage: pushmessage, context: {"#brand": meta.get("company_name"), "#botname": meta.get("bot_name")}}
                     if(origin===meta.get('domain')&&meta.get('is_live')&&meta.get('is_active')&&header_hash==meta.get('hash')){
                         if(meta.get('limitflag')){
                             if(meta.get('usercount')<=meta.get('userlimit')){
