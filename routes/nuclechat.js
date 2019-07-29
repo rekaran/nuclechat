@@ -51,7 +51,7 @@ router.post("/key/:domain", (req, res, next)=>{
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 console.log(Object.keys(req.body).includes("id"));
                 let cust_id = "";
-                if(Object.keys(req.body).includes("id")===false){
+                if(Object.keys(req.body).includes("id")===false||req.body.id===null){
                     cust_id = meta.get("projectId").split("_")[0]+"_"+meta.get("globalcount")+"_"+randomNumber(6);
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
                     keymapper.update({_id: meta.get("_id")}, {globalcount: (meta.get("globalcount")+1)});
