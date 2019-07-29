@@ -57,7 +57,7 @@ router.post("/key/:domain", (req, res, next)=>{
                     console.log(inc);
                     keymapper.updateOne({domain: domain, hash: header_hash}, {$set: {globalcount: inc}}, (err, res)=>{
                         if(err) console.log(err);
-                        console.log("Result Updated")
+                        console.log(res)
                     });
                 }else{
                     cust_id = req.body.id;
