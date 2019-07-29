@@ -32,7 +32,6 @@ var getTimestamp = offset =>{
 router.post("/key/:domain", (req, res, next)=>{
     try {
         const domain = req.params.domain;
-        console.log(req.body);
         let hash = req.body.key;
         let header_hash = req.get('Authorization');
         let origin = req.get('origin').split("://")[1];
@@ -41,6 +40,10 @@ router.post("/key/:domain", (req, res, next)=>{
             let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
             header_hash = dataDec.toString(CryptoJS.enc.Utf8);
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
+                console.log(Object.keys(req.body).includes("id"));
+                if(Object.keys(req.body).includes("id")){
+
+                }
                 if(Object.keys(meta).length!==0){
                     let pushmessages = meta.get("pushmessage");
                     let pushmessage = pushmessages[req.get("Referer")] || {};
