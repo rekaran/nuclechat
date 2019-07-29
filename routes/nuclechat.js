@@ -32,6 +32,7 @@ var getTimestamp = offset =>{
 router.post("/key/:domain", (req, res, next)=>{
     try {
         const domain = req.params.domain;
+        console.log(req.body);
         let hash = req.body.key;
         let header_hash = req.get('Authorization');
         let origin = req.get('origin').split("://")[1];
