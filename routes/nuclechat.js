@@ -16,7 +16,7 @@ resourceManager.connect("mongodb://nt-test:cqEu8v4Un6VimhVo@nt-test-shard-00-00-
 // Collection Objects
 var shielded = dataManager.model("shielded", new mongoose.Schema({ strict: false }), "shielded");
 var metamorph = dataManager.model("metamorph", new mongoose.Schema({ strict: false }), "metamorph");
-var keymapper = dataManager.model("keymapper", mongoose.Schema({domain: String, hash: String, globalcount: Number},{ strict: false }), "keymapper");
+var keymapper = dataManager.model("keymapper", mongoose.Schema({domain: String, hash: String, usercount: Number, globalcount: Number},{ strict: false }), "keymapper");
 var resources = resourceManager.model("resources", new mongoose.Schema({ strict: false }), "resources");
 
 // Javascript Function
@@ -54,7 +54,9 @@ router.post("/key/:domain", (req, res, next)=>{
                     cust_id = meta.get("projectId").split("_")[0]+"_"+meta.get("globalcount")+"_"+randomNumber(6);
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
                     meta.globalcount += 1;
+                    meta.usercount += 1;
                     meta.markModified("globalcount");
+                    meta.markModified("usercount");
                     meta.save(err=>{
                         if(err) console.log(err);
                     });
