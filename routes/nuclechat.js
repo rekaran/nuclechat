@@ -56,7 +56,7 @@ router.post("/key/:domain", (req, res, next)=>{
                     let inc = meta.get("globalcount")+1;
                     console.log(inc);
                     meta.set("globalcount", inc);// = inc;
-                    await meta.save();
+                    meta.save();
                 }else{
                     cust_id = req.body.id;
                 }
