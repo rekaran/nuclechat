@@ -48,14 +48,13 @@ router.post("/key/:domain", (req, res, next)=>{
         if(header_hash===hash&&origin===domain){
             let dataDec = CryptoJS.RabbitLegacy.decrypt(header_hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
             header_hash = dataDec.toString(CryptoJS.enc.Utf8);
-            keymapper.find({}).then(meta=>{
-                console.log(meta);
-            })
             keymapper.findOne({domain: domain, hash: header_hash}).then(meta=>{
                 let cust_id = "";
                 if(Object.keys(req.body).includes("id")===false||req.body.id===null){
                     cust_id = meta.get("projectId").split("_")[0]+"_"+meta.get("globalcount")+"_"+randomNumber(6);
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
+                    meta.globalcount += 1;
+                    meta.markModified("globalcount");
                 }else{
                     cust_id = req.body.id;
                 }
