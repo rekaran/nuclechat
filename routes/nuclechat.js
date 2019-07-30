@@ -59,7 +59,7 @@ router.post("/key/:domain", (req, res, next)=>{
                         runValidators: false,
                         strict: false
                     };
-                    keymapper.updateOne({domain: domain, hash: header_hash}, {globalcount: inc}, opts);
+                    keymapper.updateOne({domain: domain, hash: header_hash}, {$set: {globalcount: inc}}, opts);
                 }else{
                     cust_id = req.body.id;
                 }
