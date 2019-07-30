@@ -54,9 +54,12 @@ router.post("/key/:domain", (req, res, next)=>{
                     cust_id = meta.get("projectId").split("_")[0]+"_"+meta.get("globalcount")+"_"+randomNumber(6);
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
                     let inc = meta.get("globalcount")+1;
-                    console.log(inc);
-                    meta.set("globalcount", inc);// = inc;
-                    meta.save();
+                    let opts = {
+                        upsert: true,
+                        runValidators: false,
+                        strict: false
+                    };
+                    keymapper.updateOne({domain: domain, hash: header_hash}, {globalcount: inc}, opts);
                 }else{
                     cust_id = req.body.id;
                 }
