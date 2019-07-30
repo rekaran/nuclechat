@@ -55,8 +55,8 @@ router.post("/key/:domain", (req, res, next)=>{
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
                     let inc = meta.get("globalcount")+1;
                     console.log(inc);
-                    meta.set("globalcount", inc)// = inc;
-                    meta.save();
+                    meta.set("globalcount", inc);// = inc;
+                    await meta.save();
                 }else{
                     cust_id = req.body.id;
                 }
