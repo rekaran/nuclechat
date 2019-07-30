@@ -16,7 +16,7 @@ resourceManager.connect("mongodb://nt-test:cqEu8v4Un6VimhVo@nt-test-shard-00-00-
 // Collection Objects
 var shielded = dataManager.model("shielded", new mongoose.Schema({ strict: false }), "shielded");
 var metamorph = dataManager.model("metamorph", new mongoose.Schema({ strict: false }), "metamorph");
-var keymapper = dataManager.model("keymapper", new mongoose.Schema({ strict: true }), "keymapper");
+var keymapper = dataManager.model("keymapper", new mongoose.Schema({ strict: false }), "keymapper");
 var resources = resourceManager.model("resources", new mongoose.Schema({ strict: false }), "resources");
 
 // Javascript Function
@@ -53,13 +53,6 @@ router.post("/key/:domain", (req, res, next)=>{
                 if(Object.keys(req.body).includes("id")===false||req.body.id===null){
                     cust_id = meta.get("projectId").split("_")[0]+"_"+meta.get("globalcount")+"_"+randomNumber(6);
                     cust_id = CryptoJS.RabbitLegacy.encrypt(cust_id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0").toString();
-                    let inc = meta.get("globalcount")+1;
-                    let opts = {
-                        upsert: true,
-                        runValidators: false,
-                        strict: false
-                    };
-                    keymapper.updateOne({domain: domain, hash: header_hash}, {$set: {globalcount: inc}}, opts);
                 }else{
                     cust_id = req.body.id;
                 }
