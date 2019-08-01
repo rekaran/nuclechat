@@ -26,8 +26,10 @@ app.use(express.json());
 app.use(nuclechatRouter);
 
 const server = app.listen(3000, "127.0.0.1");
-// const io = require("./socket").init(server);
+const io = require("./socket").init(server);
 
-// io.on("connection", socket=>{
-//     console.log("client connected");
-// });
+io.on("connection", socket=>{
+    socket.on("message", data=>{
+        console.log(data);
+    });
+});

@@ -38,7 +38,7 @@ let randomNumber = length =>{
 };
 
 // Express Routes
-router.post("/key/:domain", (req, res, next)=>{
+router.post("/i/:domain", (req, res, next)=>{ //Keys Route
     try {
         const domain = req.params.domain;
         let hash = req.body.key;
@@ -100,7 +100,7 @@ router.post("/key/:domain", (req, res, next)=>{
     }
 });
 
-router.post("/data/:domain", (req, res, next)=>{
+router.post("/s/:domain", (req, res, next)=>{ // Metamorph Route
     try{
         const domain = req.params.domain;
         let hash = req.body.key;
@@ -129,7 +129,7 @@ router.post("/data/:domain", (req, res, next)=>{
     }
 });
 
-router.post("/datas/:domain", (req, res, next)=>{
+router.post("/s/:domain", (req, res, next)=>{ //Shielded Route
     try{
         const domain = req.params.domain;
         let hash = req.body.key;
@@ -158,7 +158,7 @@ router.post("/datas/:domain", (req, res, next)=>{
     }
 });
 
-router.post("/resources/:domain", (req, res, next)=>{
+router.post("/r/:domain", (req, res, next)=>{ //Resources Route
     try{
         const domain = req.params.domain;
         let hash = req.body.key;
