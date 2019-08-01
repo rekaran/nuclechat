@@ -100,7 +100,7 @@ router.post("/i/:domain", (req, res, next)=>{ //Keys Route
     }
 });
 
-router.post("/s/:domain", (req, res, next)=>{ // Metamorph Route
+router.post("/a/:domain", (req, res, next)=>{ // Metamorph Route
     try{
         const domain = req.params.domain;
         let hash = req.body.key;
