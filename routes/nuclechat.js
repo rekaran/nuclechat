@@ -93,7 +93,7 @@ router.post("/i/:domain", (req, res, next)=>{ //Keys Route
         }else{
             res.status(404).send({});
         }
-        console.log("Key -> ", origin, userIP);
+        // console.log("Key -> ", origin, userIP);
     }catch(err){
         console.log(err);
         res.status(404).send({});
@@ -122,7 +122,7 @@ router.post("/a/:domain", (req, res, next)=>{ // Metamorph Route
         }else{
             res.status(301).redirect("https://www.nucletech.com");
         }
-        console.log("Data -> ", origin, userIP);
+        // console.log("Data -> ", origin, userIP);
     }catch(err){
         console.log(err);
         res.status(404).send({});
@@ -151,7 +151,7 @@ router.post("/s/:domain", (req, res, next)=>{ //Shielded Route
         }else{
             res.status(301).redirect("https://www.nucletech.com");
         }
-        console.log("Datas -> ", origin, userIP);
+        // console.log("Datas -> ", origin, userIP);
     }catch(err){
         console.log(err);
         res.status(404).send({});
@@ -181,7 +181,7 @@ router.post("/r/:domain", (req, res, next)=>{ //Resources Route
         }else{
             res.status(301).redirect("https://www.nucletech.com");
         }
-        console.log("Resouces -> ", origin, userIP);
+        // console.log("Resouces -> ", origin, userIP);
     }catch(err){
         console.log(err);
         res.status(404).send({});
@@ -212,7 +212,7 @@ router.post("/encode/:domain", (req, res, next)=>{
         }else{
             res.status(301).redirect("https://www.nucletech.com");
         }
-        console.log("Encode -> ", origin, userIP);
+        // console.log("Encode -> ", origin, userIP);
     }catch(err){
         console.log(err);
         res.status(404).send({});

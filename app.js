@@ -36,6 +36,6 @@ io.on("connection", socket=>{
         let hash = hashDec.toString(CryptoJS.enc.Utf8);
         let dataDec = CryptoJS.RabbitLegacy.decrypt(data.data, hash);
         data = dataDec.toString(CryptoJS.enc.Utf8);
-        console.log(data);
+        // console.log(data);
     });
 });
