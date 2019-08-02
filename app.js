@@ -30,6 +30,7 @@ const server = app.listen(3000, "127.0.0.1");
 const io = require("./socket").init(server);
 
 io.on("connection", socket=>{
+    console.log(Object.keys(socket));
     socket.on("message", data=>{
         let hashDec = CryptoJS.RabbitLegacy.decrypt(data.hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
         let hash = hashDec.toString(CryptoJS.enc.Utf8);
