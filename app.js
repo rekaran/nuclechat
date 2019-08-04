@@ -45,7 +45,7 @@ io.on("connection", socket=>{
         let hashDec = CryptoJS.RabbitLegacy.decrypt(data.hash, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
         let hash = hashDec.toString(CryptoJS.enc.Utf8);
         let dataDec = CryptoJS.RabbitLegacy.decrypt(data.data, hash);
-        data = dataDec.toString(CryptoJS.enc.Utf8);
+        data = JSON.parse(dataDec.toString(CryptoJS.enc.Utf8));
         let id =  CryptoJS.RabbitLegacy.decrypt(data.id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
         id = id.toString(CryptoJS.enc.Utf8);
         if(data.type=="append"){
