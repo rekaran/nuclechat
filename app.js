@@ -1,7 +1,17 @@
+const Mongoose = require('mongoose').Mongoose;
+var ObjectID = require('mongodb').ObjectID;
 const bodyParser = require("body-parser");
 const CryptoJS = require("crypto-js");
+const mongoose = require("mongoose");
 const express = require("express");
 var cors = require('cors');
+
+// DataBase Connection
+var chatManager = new Mongoose();
+chatManager.connect("mongodb://nt-test:cqEu8v4Un6VimhVo@nt-test-shard-00-00-0tdov.mongodb.net:27017,nt-test-shard-00-01-0tdov.mongodb.net:27017,nt-test-shard-00-02-0tdov.mongodb.net:27017/chatManager?ssl=true&replicaSet=nt-test-shard-0&authSource=admin&retryWrites=true&w=majority", { useNewUrlParser: true }).then(console.dir("Connecting to MongoDB - ChatManager..."));
+
+// Collection Objects
+var chats = chatManager.model("chats", mongoose.Schema({userId: String, timestamp: Number, chats: Object},{ strict: false }), "chats");
 
 const app = express();
 const whitelist = ['*'];
@@ -36,6 +46,20 @@ io.on("connection", socket=>{
         let hash = hashDec.toString(CryptoJS.enc.Utf8);
         let dataDec = CryptoJS.RabbitLegacy.decrypt(data.data, hash);
         data = dataDec.toString(CryptoJS.enc.Utf8);
-        console.log(data);
+        let id =  CryptoJS.RabbitLegacy.decrypt(data.id, "QC2oLKfCCACpXOZbJ9YQsm/Gq4QdhjWAW0qmyNcVqO/q3Ec+1Efte5zZgftUDoE4YXdGUVLbTz5IhOP0");
+        id = id.toString(CryptoJS.enc.Utf8);
+        if(data.type=="append"){
+            chats.find({userId: id}).sort({"timestamp":-1}).then(meta=>{
+                meta.chats = data.data;
+                meta.timestamp = data.timestamp;
+                meta.markModified("chats");
+                meta.save(err=>{
+                    if(err) console.log(err);
+                });
+            });
+        }else if(data.type=="new"){
+            let insert_data = {userId: id, chats: data.data, timestamp: data.timestamp, _id: new ObjectID()}
+            chats.insertMany([insert_data], (err, docs)=>{});
+        }
     });
 });
