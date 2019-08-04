@@ -50,10 +50,10 @@ io.on("connection", socket=>{
         id = id.toString(CryptoJS.enc.Utf8);
         if(data.type=="append"){
             chats.find({userId: id}).sort({"timestamp":-1}).then(meta=>{
-                meta.chats = data.data;
-                meta.timestamp = data.timestamp;
-                meta.markModified("chats");
-                meta.save(err=>{
+                meta[0].chats = data.data;
+                meta[0].timestamp = data.timestamp;
+                meta[0].markModified("chats");
+                meta[0].save(err=>{
                     if(err) console.log(err);
                 });
             });
